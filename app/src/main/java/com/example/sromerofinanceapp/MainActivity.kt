@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +22,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sromerofinanceapp.ui.theme.PastelBlue
+import com.example.sromerofinanceapp.ui.theme.PastelGreen
+import com.example.sromerofinanceapp.ui.theme.PastelOrange
+import com.example.sromerofinanceapp.ui.theme.PastelPurple
 import com.example.sromerofinanceapp.ui.theme.SRomeroFinanceAppTheme
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +56,7 @@ fun HomeScreen(user: User) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            TopAppBar( modifier = Modifier.background(Color.White),
                 title = {
                     Column {
                         Text(
@@ -72,8 +78,9 @@ fun HomeScreen(user: User) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = Color.White, // Un fondo blanco
+                    titleContentColor = Color.Black, // Color del título
+                    actionIconContentColor = Color.Black // Color de los iconos de acción
                 )
             )
         }
@@ -106,9 +113,9 @@ fun HomeScreen(user: User) {
 @Composable
 fun SummaryCardsSection() {
     val cards = listOf(
-        SummaryCard("Actividad de la Semana", 1250.0, Color(0xFF6200EE)),
-        SummaryCard("Ventas totales", 5430.0, Color(0xFF03DAC5)),
-        SummaryCard("Ganancias totales", 2100.0, Color(0xFFFFB74D))
+        SummaryCard("Actividad de la Semana", 1250.0, PastelPurple),
+        SummaryCard("Ventas totales", 5430.0, PastelBlue),
+        SummaryCard("Ganancias totales", 2100.0, PastelGreen)
     )
 
     Row(
@@ -123,7 +130,8 @@ fun SummaryCardsSection() {
                     .width(160.dp)
                     .height(100.dp),
                 colors = CardDefaults.cardColors(containerColor = card.color),
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp) //Esto quita la sombra
             ) {
                 Column(
                     modifier = Modifier
@@ -162,7 +170,10 @@ fun TransactionsHeader() {
             text = "Transactions",
             style = MaterialTheme.typography.titleLarge
         )
-        TextButton(onClick = { /* Ver todas */ }) {
+        TextButton(onClick = { /* Ver todas */ },
+            colors = ButtonDefaults.textButtonColors(
+                contentColor = PastelOrange
+            )) {
             Text("See All")
         }
     }
@@ -176,12 +187,11 @@ fun TransactionItem(transaction: Transaction) {
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Ícono usando recurso drawable
         Icon(
             painter = painterResource(id = transaction.iconRes),
             contentDescription = null,
             modifier = Modifier.size(40.dp),
-            tint = MaterialTheme.colorScheme.primary
+            tint = Color.Black.copy(alpha = 0.6f)
         )
         Spacer(modifier = Modifier.width(16.dp))
 
@@ -192,12 +202,13 @@ fun TransactionItem(transaction: Transaction) {
             Text(
                 text = transaction.establishment,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             Text(
                 text = transaction.category,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color.Black.copy(alpha = 0.6f)
             )
         }
 
@@ -205,16 +216,20 @@ fun TransactionItem(transaction: Transaction) {
         Column(
             horizontalAlignment = Alignment.End
         ) {
+            val amountColor = if (transaction.amount >= 0)
+                Color(0xFF66BB6A) // verde pastel
+            else
+                Color(0xFFEF5350) // rojo pastel
             Text(
-                text = "$${String.format("%.2f", transaction.amount)}",
-                color = if (transaction.amount >= 0) Color.Green else Color.Red,
+                text = "$${String.format(Locale.US, "%.2f", transaction.amount)}",
+                color = amountColor,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = transaction.time,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color.Black.copy(alpha = 0.5f)
             )
         }
     }

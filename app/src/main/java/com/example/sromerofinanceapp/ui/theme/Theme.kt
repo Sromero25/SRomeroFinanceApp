@@ -9,8 +9,13 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
+val PastelPurple = Color(0xFFB39DDB)  // Morado pastel
+val PastelGreen = Color(0xFF80CBC4)   // Verde pastel
+val PastelBlue = Color(0xFF90CAF9)    // Azul pastel
+val PastelOrange = Color(0xFFFFCC80)  // Naranja pastel (para alguna variante)
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
